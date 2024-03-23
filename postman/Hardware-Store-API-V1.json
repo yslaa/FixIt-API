@@ -439,6 +439,11 @@
 									"type": "text"
 								},
 								{
+									"key": "stock",
+									"value": "2",
+									"type": "string"
+								},
+								{
 									"key": "image",
 									"type": "file",
 									"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
@@ -503,6 +508,11 @@
 									"key": "variant",
 									"value": "International",
 									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "2",
+									"type": "string"
 								},
 								{
 									"key": "image",
