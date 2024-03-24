@@ -29,6 +29,15 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Please enter a price"],
   },
+  wishlist: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: RESOURCE.USER,
+      },
+    },
+  ],
   stock: {
     type: Number,
     required: [true, "Enter the quantity of the Product"],
