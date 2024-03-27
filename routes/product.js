@@ -4,13 +4,13 @@ const productController = require("../controllers/productController");
 const { verifyJWT, authorizeRoles } = require("../middleware/verifyJWT");
 const { METHOD, PATH, ROLE } = require("../constants/index");
 
-router.use(verifyJWT);
+// router.use(verifyJWT);
 
 const productRoutes = [
   {
     method: METHOD.GET,
     path: PATH.PRODUCTS,
-    roles: [ROLE.ADMIN, ROLE.EMPLOYEE, ROLE.CUSTOMER],
+    // roles: [ROLE.ADMIN, ROLE.EMPLOYEE, ROLE.CUSTOMER],
     handler: productController.getAllProducts,
   },
   {
@@ -41,7 +41,10 @@ const productRoutes = [
 
 productRoutes.forEach((route) => {
   const { method, path, roles, handler } = route;
-  router[method](path, authorizeRoles(...roles), handler);
+  router[method](path,
+    handler,  
+    // authorizeRoles(...roles)
+    );
 });
 
 module.exports = router;
