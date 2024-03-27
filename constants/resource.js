@@ -3,7 +3,7 @@ module.exports = {
   PRODUCT: "product",
   TRANSACTION: "transaction",
   COMMENT: "comment",
-  DELIVERY: "delivery",
+  BRAND: "brand",
   IMAGES: "Images",
   IMAGE: "image",
   PRODUCTION: "production",
