@@ -1,6 +1,5 @@
 const Product = require("../models/product");
 const Transaction = require("../models/transaction");
-const Delivery = require("../models/delivery");
 const mongoose = require("mongoose");
 const ErrorHandler = require("../utils/errorHandler");
 const { cloudinary } = require("../utils/cloudinary");
@@ -10,10 +9,6 @@ exports.getAllProductData = async () => {
   const products = await Product.find()
     .sort({
       createdAt: STATUSCODE.NEGATIVE_ONE,
-    })
-    .populate({
-      path: RESOURCE.USER,
-      select: "name",
     })
     .lean()
     .exec();
@@ -27,10 +22,6 @@ exports.getSingleProductData = async (id) => {
   }
 
   const product = await Product.findById(id)
-    .populate({
-      path: RESOURCE.USER,
-      select: "name",
-    })
     .lean()
     .exec();
 
@@ -77,11 +68,6 @@ exports.createProductData = async (req, res) => {
   const product = await Product.create({
     ...req.body,
     image: image,
-  });
-
-  await Product.populate(product, {
-    path: RESOURCE.USER,
-    select: "name",
   });
 
   return product;
@@ -140,10 +126,6 @@ exports.updateProductData = async (req, res, id) => {
       runValidators: true,
     }
   )
-    .populate({
-      path: RESOURCE.USER,
-      select: "name",
-    })
     .lean()
     .exec();
 
@@ -173,11 +155,6 @@ exports.deleteProductData = async (id) => {
       .exec(),
     cloudinary.api.delete_resources(publicIds),
     Transaction.deleteMany({
-      product: id,
-    })
-      .lean()
-      .exec(),
-    Delivery.deleteMany({
       product: id,
     })
       .lean()
