@@ -17,7 +17,7 @@ module.exports = {
   COMMENTS: "/comments",
   COMMENT_ID: "/comment/:id",
   EDIT_COMMENT_ID: "/comment/edit/:id",
-  DELIVERYS: "/deliverys",
-  DELIVERY_ID: "/delivery/:id",
-  EDIT_DELIVERY_ID: "/delivery/edit/:id",
+  BRANDS: "/brands",
+  BRAND_ID: "/brand/:id",
+  EDIT_BRAND_ID: "/brand/edit/:id",
 };
