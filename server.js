@@ -13,7 +13,7 @@ const users = require("./routes/user");
 const products = require("./routes/product");
 const transactions = require("./routes/transaction");
 const comments = require("./routes/comment");
-const delivery = require("./routes/delivery");
+const brands = require("./routes/brand");
 const { STATUSCODE } = require("./constants/index");
 const connectDB = require("./config/db");
 const PORT = process.env.PORT || 4000;
@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use("/", express.static(path.join(__dirname, "/public")));
 app.use("/", require("./routes/root"));
 
-app.use("/api/v1", auth, users, products, transactions, comments, delivery);
+app.use("/api/v1", auth, users, products, transactions, comments, brands);
 
 app.all("*", (req, res) => {
   const filePath = req.accepts("html")
