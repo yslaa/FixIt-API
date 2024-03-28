@@ -162,3 +162,58 @@ exports.deleteProductData = async (id) => {
   ]);
   return product;
 };
+
+exports.createWishlistData = async (userId, id) => {
+  const product = await Product.findById(id);
+
+  // Check if the product exists
+  if (!product) {
+    throw new ErrorHandler("Product not found");
+  }
+
+
+  if (!product.wishlist) {
+    product.wishlist = [];
+  }
+
+
+  const isUserInWishlist = product.wishlist.some(wish => wish.user.toString() === userId.toString());
+
+  if (isUserInWishlist) {
+    throw new ErrorHandler("User already exists in the wishlist");
+  }
+
+
+  product.wishlist.push({user: userId});
+  await product.save();
+
+  await product.populate({
+    path: 'wishlist.user',
+    select: 'name',
+  });
+
+}
+
+
+
+exports.deleteWishlistData = async (userId, id) => {
+  const product = await Product.findById(id);
+
+  if (!product) {
+    throw new ErrorHandler("Product not found");
+  }
+  const wishlistIndex = product.wishlist.findIndex(wish => wish.user.toString() === userId.toString());
+
+  if (wishlistIndex === -1) {
+    throw new ErrorHandler(`Wishlist not found with ID: ${product}`);
+  }
+
+
+  product.wishlist.splice(wishlistIndex, 1);
+  await product.save();
+
+  await product.populate({
+    path: 'wishlist.user',
+    select: 'name',
+  });
+};

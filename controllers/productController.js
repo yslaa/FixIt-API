@@ -77,3 +77,31 @@ exports.deleteProduct = asyncHandler(async (req, res, next) => {
         product
       );
 });
+
+exports.createWishlistProduct = [
+  // checkRequiredFields(["user"]),
+  asyncHandler(async (req, res, next) => {
+   
+    const wishlist = await productsService.createWishlistData(req.params.userId, req.params.id)
+
+    return SuccessHandler(
+      res,
+      `Created new Wishlist `,
+      wishlist
+    )
+  })
+]
+
+exports.deleteWishlistProduct = [
+  // checkRequiredFields(["user"]),
+  asyncHandler(async (req, res, next) => {
+   
+    const wishlist = await productsService.deleteWishlistData(req.params.userId, req.params.id)
+
+    return SuccessHandler(
+      res,
+      `Delete Wishlist `,
+      wishlist
+    )
+  })
+]

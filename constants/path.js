@@ -20,4 +20,5 @@ module.exports = {
   BRANDS: "/brands",
   BRAND_ID: "/brand/:id",
   EDIT_BRAND_ID: "/brand/edit/:id",
+  WISHLIST_ID: "/wishlist/:id/:userId",
 };

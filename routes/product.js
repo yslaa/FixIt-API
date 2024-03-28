@@ -37,6 +37,18 @@ const productRoutes = [
     roles: [ROLE.ADMIN],
     handler: productController.deleteProduct,
   },
+  {
+    method: METHOD.POST,
+    path: PATH.WISHLIST_ID,
+    // roles: [ROLE.ADMIN, ROLE.EMPLOYEE, ROLE.CUSTOMER],
+    handler: productController.createWishlistProduct,
+  },
+  {
+    method: METHOD.DELETE,
+    path: PATH.WISHLIST_ID,
+    // roles: [ROLE.ADMIN, ROLE.EMPLOYEE, ROLE.CUSTOMER],
+    handler: productController.deleteWishlistProduct,
+  },
 ];
 
 productRoutes.forEach((route) => {
