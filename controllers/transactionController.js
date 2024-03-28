@@ -36,7 +36,7 @@ exports.getSingleTransaction = asyncHandler(async (req, res, next) => {
 });
 
 exports.createNewTransaction = [
-  checkRequiredFields(["user", "orderItems", "payment"]),
+  checkRequiredFields(["user", "orderItems"]),
   asyncHandler(async (req, res, next) => {
     const { 
       user,

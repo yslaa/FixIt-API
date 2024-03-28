@@ -64,7 +64,7 @@ exports.createTransactionData = async (data) => {
     totalPrice,
   } = data;
 
-  const users = await User.findById(userId).select("email");
+  const users = await User.findById(user).select("email");
 
   const transaction = await Transaction.create({
     user,
@@ -91,7 +91,7 @@ exports.createTransactionData = async (data) => {
     },
   ]);
 
-  const historyUrl = "http://localhost:3000/customer/transactionHistory";
+  // const historyUrl = "http://localhost:3000/customer/transactionHistory";
 
   const emailOptions = {
     to: users?.email,
@@ -142,7 +142,7 @@ exports.createTransactionData = async (data) => {
           <h1>CONGRATULATIONS!!!</h1>
           <p> Your Transaction has been successfully completed. We sincerely appreciate your business and thank you for choosing us! </p>
           <p class="center">
-            <a href="${historyUrl}">Go Back To See Your History</a>
+            <a href="">Go Back To See Your History</a>
           </p>
         </div>
       </body>

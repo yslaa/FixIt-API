@@ -17,13 +17,15 @@ const transactionSchema = new mongoose.Schema({
     default: Date.now()
   },
   payment: {
-    type: String,
-    default: "Cash on Delivery",
-    enum: {
-      values: ["Cash on Delivery, Bank Transfer, Card Payment"],
-    },
-    card: {
-      type: String
+    type: Object,
+    properties: {
+        value: {
+            type: String,
+            enum: ["Cash on Delivery", "Bank Transfer", "Card Payment"]
+        },
+        card: {
+            type: String
+        }
     }
   },
   shippingInfo: {
