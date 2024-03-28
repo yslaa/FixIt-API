@@ -36,16 +36,33 @@ exports.getSingleTransaction = asyncHandler(async (req, res, next) => {
 });
 
 exports.createNewTransaction = [
-  checkRequiredFields(["user", "product", "payment", "date"]),
+  checkRequiredFields(["user", "orderItems", "payment"]),
   asyncHandler(async (req, res, next) => {
-    const { user, date } = req.body;
-    const product = req.body.product || [];
+    const { 
+      user,
+      status,
+      dateOrdered,
+      payment,
+      shippingInfo,
+      itemsPrice,
+      shippingPrice,
+      totalPrice
+    } = req.body;
+    const orderItems = req.body.orderItems || [];
 
     const transactionData = {
       user,
-      product,
-      date,
+      status,
+      dateOrdered,
+      payment,
+      shippingInfo,
+      orderItems,
+      itemsPrice,
+      shippingPrice,
+      totalPrice
     };
+
+    console.log(transactionData);
 
     const transaction = await transactionsService.createTransactionData(
       transactionData

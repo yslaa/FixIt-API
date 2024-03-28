@@ -52,15 +52,33 @@ exports.getSingleTransactionData = async (id) => {
 };
 
 exports.createTransactionData = async (data) => {
-  const { user: userId, product, date } = data;
+  const { 
+    user,
+    status,
+    dateOrdered,
+    payment,
+    shippingInfo,
+    orderItems,
+    itemsPrice,
+    shippingPrice,
+    totalPrice,
+  } = data;
 
-  const user = await User.findById(userId).select("email");
+  const users = await User.findById(userId).select("email");
 
   const transaction = await Transaction.create({
-    user: userId,
-    product,
-    date,
+    user,
+    status,
+    dateOrdered,
+    payment,
+    shippingInfo,
+    orderItems,
+    itemsPrice,
+    shippingPrice,
+    totalPrice,
   });
+
+  console.log(transaction)
 
   await Transaction.populate(transaction, [
     {
@@ -76,7 +94,7 @@ exports.createTransactionData = async (data) => {
   const historyUrl = "http://localhost:3000/customer/transactionHistory";
 
   const emailOptions = {
-    to: user?.email,
+    to: users?.email,
     subject: "Transaction Successful",
     html: `<html>
       <head>
