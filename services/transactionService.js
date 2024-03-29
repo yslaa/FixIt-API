@@ -11,16 +11,6 @@ exports.getAllTransactionData = async () => {
     .sort({
       createdAt: STATUSCODE.NEGATIVE_ONE,
     })
-    .populate([
-      {
-        path: RESOURCE.USER,
-        select: "name",
-      },
-      {
-        path: RESOURCE.PRODUCT,
-        select: "product_name price image",
-      },
-    ])
     .lean()
     .exec();
 
@@ -159,21 +149,13 @@ exports.updateTransactionData = async (req, res, id) => {
     throw new ErrorHandler(`Invalid transaction ID: ${id}`);
   }
 
+  console.log(req.body)
+
   const existingTransaction = await Transaction.findOneAndUpdate(
     { _id: id },
     req.body,
     { new: true, runValidators: true }
   )
-    .populate([
-      {
-        path: RESOURCE.USER,
-        select: "name email",
-      },
-      {
-        path: RESOURCE.PRODUCT,
-        select: "product_name price image",
-      },
-    ])
     .lean()
     .exec();
 
@@ -183,11 +165,13 @@ exports.updateTransactionData = async (req, res, id) => {
 
   const { user, status } = existingTransaction;
 
+  const users = await User.findById(user).select("email");
+
   if (status === "Completed") {
-    const historyUrl = "http://localhost:3000/";
+    // const historyUrl = "http://localhost:3000/";
 
     const emailOptions = {
-      to: user?.email,
+      to: users?.email,
       subject: "Congratulations! Your Transaction is Completed",
       html: `<html>
         <head>
@@ -235,7 +219,7 @@ exports.updateTransactionData = async (req, res, id) => {
             <h1>Congratulations!</h1>
             <p>Your transaction has been successfully completed. We appreciate your business and thank you for choosing us!</p>
             <p class="center">
-              <a href="${historyUrl}">Go Back To See Your History</a>
+              <a href="">Go Back To See Your History</a>
             </p>
           </div>
         </body>
