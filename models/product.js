@@ -9,11 +9,11 @@ const productSchema = new mongoose.Schema({
     required: [true, "Please enter a product name"],
     maxLength: [30, "The product name cannot exceed 30 characters"],
   },
-  brand: [{
+  brand: {
     type: mongoose.Schema.Types.ObjectId,
     required: [true, "Please enter a brand"],
     ref: RESOURCE.BRAND,
-  }, ],
+  },
   type: {
     type: String,
     enum: ["Door Accessories", "Machinery Equipment", "Hand Tools", "Safety and Security", "Power Tools", "Painting", "Electrical", "Lighting", "Building Materials"],
