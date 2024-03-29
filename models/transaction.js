@@ -60,15 +60,12 @@ const transactionSchema = new mongoose.Schema({
             type: String,
             required: true
           },
-          class: {
-            type: String,
-            required: true
+          brand: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: RESOURCE.BRAND,
           },
           productType: {
-            type: String,
-            required: true
-          },
-          variant: {
             type: String,
             required: true
           },
