@@ -22,16 +22,6 @@ exports.getSingleTransactionData = async (id) => {
     throw new ErrorHandler(`Invalid transaction ID: ${id}`);
 
   const transaction = await Transaction.findById(id)
-    .populate([
-      {
-        path: RESOURCE.USER,
-        select: "name",
-      },
-      {
-        path: RESOURCE.PRODUCT,
-        select: "product_name price image",
-      },
-    ])
     .lean()
     .exec();
 
