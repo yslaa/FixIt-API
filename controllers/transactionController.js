@@ -38,7 +38,7 @@ exports.getSingleTransaction = asyncHandler(async (req, res, next) => {
 exports.createNewTransaction = [
   checkRequiredFields(["user", "orderItems"]),
   asyncHandler(async (req, res, next) => {
-    const { 
+    const {
       user,
       status,
       dateOrdered,
@@ -46,7 +46,7 @@ exports.createNewTransaction = [
       shippingInfo,
       itemsPrice,
       shippingPrice,
-      totalPrice
+      totalPrice,
     } = req.body;
     const orderItems = req.body.orderItems || [];
 
@@ -59,7 +59,7 @@ exports.createNewTransaction = [
       orderItems,
       itemsPrice,
       shippingPrice,
-      totalPrice
+      totalPrice,
     };
 
     console.log(transactionData);
@@ -106,3 +106,25 @@ exports.deleteTransaction = asyncHandler(async (req, res, next) => {
         transaction
       );
 });
+
+exports.getTransactionsPerYear = async (req, res, next) => {
+  const year = req.query.year || new Date().getFullYear();
+  const transactions = await transactionsService.getTransactionsPerYear(year);
+
+  return SuccessHandler(
+    res,
+    `Transactions for year ${year} retrieved successfully`,
+    transactions
+  );
+};
+
+exports.getTransactionsPerMonth = async (req, res, next) => {
+  const year = req.query.year || new Date().getFullYear();
+  const transactions = await transactionsService.getTransactionsPerMonth(year);
+
+  return SuccessHandler(
+    res,
+    `Transactions for months of ${year} retrieved successfully`,
+    transactions
+  );
+};

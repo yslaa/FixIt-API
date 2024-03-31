@@ -21,9 +21,7 @@ exports.getSingleTransactionData = async (id) => {
   if (!mongoose.Types.ObjectId.isValid(id))
     throw new ErrorHandler(`Invalid transaction ID: ${id}`);
 
-  const transaction = await Transaction.findById(id)
-    .lean()
-    .exec();
+  const transaction = await Transaction.findById(id).lean().exec();
 
   if (!transaction)
     throw new ErrorHandler(`Transaction not found with ID: ${id}`);
@@ -32,7 +30,7 @@ exports.getSingleTransactionData = async (id) => {
 };
 
 exports.createTransactionData = async (data) => {
-  const { 
+  const {
     user,
     status,
     dateOrdered,
@@ -58,7 +56,7 @@ exports.createTransactionData = async (data) => {
     totalPrice,
   });
 
-  console.log(transaction)
+  console.log(transaction);
 
   await Transaction.populate(transaction, [
     {
@@ -139,7 +137,7 @@ exports.updateTransactionData = async (req, res, id) => {
     throw new ErrorHandler(`Invalid transaction ID: ${id}`);
   }
 
-  console.log(req.body)
+  console.log(req.body);
 
   const existingTransaction = await Transaction.findOneAndUpdate(
     { _id: id },
@@ -246,4 +244,63 @@ exports.deleteTransactionData = async (id) => {
   ]);
 
   return transaction;
+};
+
+exports.getTransactionsPerYear = async () => {
+  const currentYear = new Date().getFullYear();
+
+  const transactions = await Transaction.aggregate([
+    {
+      $group: {
+        _id: "$_id",
+        transactions: {
+          $push: {
+            year: { $year: "$dateOrdered" },
+            totalPrice: "$totalPrice",
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        transactions: {
+          $filter: {
+            input: "$transactions",
+            as: "transaction",
+            cond: { $eq: ["$$transaction.year", currentYear] },
+          },
+        },
+      },
+    },
+  ]);
+
+  return transactions;
+};
+
+exports.getTransactionsPerMonth = async (year) => {
+  const currentYear = year || new Date().getFullYear();
+
+  const transactions = await Transaction.aggregate([
+    {
+      $match: {
+        $expr: {
+          $eq: [{ $year: "$dateOrdered" }, currentYear],
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: "%B", date: "$dateOrdered" } },
+        totalAmount: { $sum: "$totalPrice" },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $sort: {
+        _id: 1,
+      },
+    },
+  ]);
+
+  return transactions;
 };

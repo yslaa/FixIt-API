@@ -37,6 +37,18 @@ const transactionRoutes = [
     roles: [ROLE.ADMIN],
     handler: transactionController.deleteTransaction,
   },
+  {
+    method: METHOD.GET,
+    path: PATH.TRANSACTIONS_YEAR,
+    roles: [ROLE.ADMIN, ROLE.EMPLOYEE],
+    handler: transactionController.getTransactionsPerYear,
+  },
+  {
+    method: METHOD.GET,
+    path: PATH.TRANSACTIONS_MONTH,
+    roles: [ROLE.ADMIN, ROLE.EMPLOYEE],
+    handler: transactionController.getTransactionsPerMonth,
+  },
 ];
 
 transactionRoutes.forEach((route) => {
