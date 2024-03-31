@@ -126,3 +126,13 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
         user
       );
 });
+
+exports.getUsersDataForPieChart = asyncHandler(async (req, res, next) => {
+  const userData = await usersService.getUsersDataForPieChart();
+
+  SuccessHandler(
+    res,
+    "User data for pie chart retrieved successfully",
+    userData
+  );
+});

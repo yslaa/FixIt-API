@@ -61,6 +61,13 @@ const userRoutes = [
     middleware: [verifyJWT],
     handler: userController.updatePassword,
   },
+  {
+    method: METHOD.GET,
+    path: PATH.USERS_CHART,
+    roles: [ROLE.ADMIN, ROLE.EMPLOYEE],
+    middleware: [verifyJWT],
+    handler: userController.getUsersDataForPieChart,
+  },
 ];
 
 userRoutes.forEach((route) => {

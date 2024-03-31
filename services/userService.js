@@ -407,3 +407,27 @@ exports.deleteUserData = async (id) => {
 
   return user;
 };
+
+exports.getUsersDataForPieChart = async () => {
+  const aggregateResult = await User.aggregate([
+    {
+      $group: {
+        _id: "$roles",
+        count: { $sum: 1 },
+        names: { $push: "$name" },
+      },
+    },
+  ]);
+
+  if (aggregateResult.length === 0) {
+    throw new ErrorHandler("No users found");
+  }
+
+  const data = aggregateResult.map((result) => ({
+    name: result.names.join(", "),
+    role: result._id.join(", "),
+    count: result.count,
+  }));
+
+  return data;
+};
