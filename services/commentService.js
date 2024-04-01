@@ -57,31 +57,33 @@ exports.getSingleCommentData = async (id) => {
 };
 
 exports.CreateCommentData = async (req, res) => {
-  let images = [];
-  if (req.files && Array.isArray(req.files)) {
-    images = await Promise.all(
-      req.files.map(async (file) => {
-        const result = await cloudinary.uploader.upload(file.path, {
-          public_id: file.filename,
-        });
-        return {
-          public_id: result.public_id,
-          url: result.url,
-          originalname: file.originalname,
-        };
-      })
-    );
-  }
+  // let images = [];
+  // if (req.files && Array.isArray(req.files)) {
+  //   images = await Promise.all(
+  //     req.files.map(async (file) => {
+  //       const result = await cloudinary.uploader.upload(file.path, {
+  //         public_id: file.filename,
+  //       });
+  //       return {
+  //         public_id: result.public_id,
+  //         url: result.url,
+  //         originalname: file.originalname,
+  //       };
+  //     })
+  //   );
+  // }
 
   const commentData = {
     ...req.body,
-    image: images,
+    // image: images,
   };
+
+  console.log(commentData)
 
   const comment = await Comment.create(commentData);
 
   await Comment.populate(comment, {
-    path: RESOURCE.TRANSACTION,
+    path: RESOURCE.PRODUCT,
     select: "status",
   });
 

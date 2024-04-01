@@ -36,7 +36,7 @@ exports.getSingleComment = asyncHandler(async (req, res, next) => {
 
 exports.createNewComment = [
   upload.array("image"),
-  checkRequiredFields(["ratings", "text", "transaction"]),
+  checkRequiredFields(["ratings", "text", "product"]),
   asyncHandler(async (req, res, next) => {
     const comment = await commentsService.CreateCommentData(req);
 

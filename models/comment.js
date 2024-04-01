@@ -7,10 +7,10 @@ const filter = new badWords();
 filter.addWords(...customBadWords);
 
 const commentSchema = new mongoose.Schema({
-  transaction: {
+  product: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: RESOURCE.TRANSACTION,
+    ref: RESOURCE.PRODUCT,
   },
   ratings: {
     type: Number,
@@ -32,22 +32,22 @@ const commentSchema = new mongoose.Schema({
       message: "Comments cannot contain profanity.",
     },
   },
-  image: [
-    {
-      public_id: {
-        type: String,
-        required: true,
-      },
-      url: {
-        type: String,
-        required: true,
-      },
-      originalname: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
+  // image: [
+  //   {
+  //     public_id: {
+  //       type: String,
+  //       required: true,
+  //     },
+  //     url: {
+  //       type: String,
+  //       required: true,
+  //     },
+  //     originalname: {
+  //       type: String,
+  //       required: true,
+  //     },
+  //   },
+  // ],
 });
 
 module.exports = mongoose.model(RESOURCE.COMMENT, commentSchema);
