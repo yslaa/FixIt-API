@@ -107,24 +107,28 @@ exports.deleteTransaction = asyncHandler(async (req, res, next) => {
       );
 });
 
+
 exports.getTransactionsPerYear = async (req, res, next) => {
-  const year = req.query.year || new Date().getFullYear();
-  const transactions = await transactionsService.getTransactionsPerYear(year);
+  const transactions = await transactionsService.getTransactionsPerYear();
+
+  const years = transactions.map(transaction => transaction.year);
 
   return SuccessHandler(
     res,
-    `Transactions for year ${year} retrieved successfully`,
+    `Transactions for years ${years.join(', ')} retrieved successfully`,
     transactions
   );
 };
 
+
 exports.getTransactionsPerMonth = async (req, res, next) => {
-  const year = req.query.year || new Date().getFullYear();
-  const transactions = await transactionsService.getTransactionsPerMonth(year);
+  const transactions = await transactionsService.getTransactionsPerMonth();
+
+  const monthsAndYears = transactions.map(transaction => `${transaction._id.month} ${transaction._id.year}`);
 
   return SuccessHandler(
     res,
-    `Transactions for months of ${year} retrieved successfully`,
+    `Transactions for months of ${monthsAndYears.join(', ')} retrieved successfully`,
     transactions
   );
 };
