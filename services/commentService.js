@@ -9,20 +9,6 @@ exports.getAllCommentData = async () => {
     .sort({
       createdAt: STATUSCODE.NEGATIVE_ONE,
     })
-    .populate({
-      path: RESOURCE.TRANSACTION,
-      populate: [
-        {
-          path: "user",
-          select: "name",
-        },
-        {
-          path: "product",
-          select: "product_name",
-        },
-      ],
-      select: "status payment",
-    })
     .lean()
     .exec();
 
