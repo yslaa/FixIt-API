@@ -247,29 +247,18 @@ exports.deleteTransactionData = async (id) => {
 };
 
 exports.getTransactionsPerYear = async () => {
-  const currentYear = new Date().getFullYear();
-
   const transactions = await Transaction.aggregate([
     {
       $group: {
-        _id: "$_id",
-        transactions: {
-          $push: {
-            year: { $year: "$dateOrdered" },
-            totalPrice: "$totalPrice",
-          },
-        },
+        _id: { $year: "$dateOrdered" },
+        totalSales: { $sum: "$totalPrice" },
       },
     },
     {
       $project: {
-        transactions: {
-          $filter: {
-            input: "$transactions",
-            as: "transaction",
-            cond: { $eq: ["$$transaction.year", currentYear] },
-          },
-        },
+        year: "$_id",
+        totalSales: 1,
+        _id: 0,
       },
     },
   ]);
@@ -277,30 +266,24 @@ exports.getTransactionsPerYear = async () => {
   return transactions;
 };
 
-exports.getTransactionsPerMonth = async (year) => {
-  const currentYear = year || new Date().getFullYear();
 
+exports.getTransactionsPerMonth = async () => {
   const transactions = await Transaction.aggregate([
     {
-      $match: {
-        $expr: {
-          $eq: [{ $year: "$dateOrdered" }, currentYear],
-        },
-      },
-    },
-    {
       $group: {
-        _id: { $dateToString: { format: "%B", date: "$dateOrdered" } },
+        _id: {
+          year: { $year: "$dateOrdered" }, // Group by year
+          month: { $dateToString: { format: "%B", date: "$dateOrdered" } } // Group by month name
+        },
         totalAmount: { $sum: "$totalPrice" },
         count: { $sum: 1 },
       },
     },
     {
-      $sort: {
-        _id: 1,
-      },
-    },
+      $sort: { "_id.year": 1, "_id.month": 1 } // Sort by year and month
+    }
   ]);
 
   return transactions;
 };
+
