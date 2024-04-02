@@ -1,4 +1,5 @@
 const Transaction = require("../models/transaction");
+const Product = require("../models/product");
 const User = require("../models/user");
 const Comment = require("../models/comment");
 const ErrorHandler = require("../utils/errorHandler");
@@ -137,7 +138,15 @@ exports.updateTransactionData = async (req, res, id) => {
     throw new ErrorHandler(`Invalid transaction ID: ${id}`);
   }
 
-  console.log(req.body);
+  const order = req.body;
+
+  console.log(order)
+
+  order.orderItem.forEach(async item => {
+    await updateStock(item.productId, item.quantity)
+    console.log("Stock Updated: ", item.product_name)
+  })
+
 
   const existingTransaction = await Transaction.findOneAndUpdate(
     { _id: id },
@@ -219,6 +228,14 @@ exports.updateTransactionData = async (req, res, id) => {
 
   return existingTransaction;
 };
+
+async function updateStock(id, quantity) {
+  const product = await Product.findById(id);
+
+  product.stock = product.stock[0] - quantity;
+
+  await product.save({ validateBeforeSave: false })
+}
 
 exports.deleteTransactionData = async (id) => {
   if (!mongoose.Types.ObjectId.isValid(id))
