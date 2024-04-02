@@ -79,36 +79,35 @@ exports.CreateCommentData = async (req, res) => {
 exports.updateCommentData = async (req, res, id) => {
   const existingComment = await Comment.findById(id).lean().exec();
 
-  let images = existingComment.image || [];
+  // let images = existingComment.image || [];
 
-  if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-    const newImages = await Promise.all(
-      req.files.map(async (file) => {
-        const result = await cloudinary.uploader.upload(file.path, {
-          public_id: file.filename,
-        });
-        return {
-          public_id: result.public_id,
-          url: result.url,
-          originalname: file.originalname,
-        };
-      })
-    );
+  // if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+  //   const newImages = await Promise.all(
+  //     req.files.map(async (file) => {
+  //       const result = await cloudinary.uploader.upload(file.path, {
+  //         public_id: file.filename,
+  //       });
+  //       return {
+  //         public_id: result.public_id,
+  //         url: result.url,
+  //         originalname: file.originalname,
+  //       };
+  //     })
+  //   );
 
-    images = [...images, ...newImages];
+  //   images = [...images, ...newImages];
 
-    if (existingComment.image && existingComment.image.length > 0) {
-      await cloudinary.api.delete_resources(
-        existingComment.image.map((image) => image.public_id)
-      );
-    }
-  }
+  //   if (existingComment.image && existingComment.image.length > 0) {
+  //     await cloudinary.api.delete_resources(
+  //       existingComment.image.map((image) => image.public_id)
+  //     );
+  //   }
+  // }
 
   const updatedComment = await Comment.findByIdAndUpdate(
     id,
     {
       ...req.body,
-      image: images,
     },
     {
       new: true,
@@ -136,9 +135,9 @@ exports.deleteCommentData = async (id) => {
   });
   if (!comment) throw new ErrorHandler(`Comment not found with ID: ${id}`);
 
-  const publicIds = comment.image.map((image) => image.public_id);
+  // const publicIds = comment.image.map((image) => image.public_id);
 
-  if (publicIds.length > 0) await cloudinary.api.delete_resources(publicIds);
+  // if (publicIds.length > 0) await cloudinary.api.delete_resources(publicIds);
 
   await Comment.deleteOne({
     _id: id,

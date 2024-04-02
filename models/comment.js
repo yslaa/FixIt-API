@@ -32,6 +32,17 @@ const commentSchema = new mongoose.Schema({
       message: "Comments cannot contain profanity.",
     },
   },
+  user: {
+    _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: RESOURCE.USER,
+    },
+    username: {
+      type: String,
+      required: true,
+    }
+  },
   // image: [
   //   {
   //     public_id: {
